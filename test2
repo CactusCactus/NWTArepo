@@ -1,0 +1,109 @@
+$ git log --patch -- git-rebase.sh
+
+commit 20351bb06bf4d32ef3d1a6849d01636f6593339f
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Sat Jun 15 18:43:26 2013 +0530
+
+    rebase: use 'git stash store' to simplify logic
+
+    rebase has no reason to know about the implementation of the stash.  In
+    the case when applying the autostash results in conflicts, replace the
+    relevant code in finish_rebase () to simply call 'git stash store'.
+
+    Signed-off-by: Ramkumar Ramachandra <artagnon@gmail.com>
+    Signed-off-by: Junio C Hamano <gitster@pobox.com>
+
+diff --git a/git-rebase.sh b/git-rebase.sh
+index d0c11a9..17be392 100755
+--- a/git-rebase.sh
++++ b/git-rebase.sh
+@@ -153,11 +153,8 @@ finish_rebase () {
+                then
+                        echo "$(gettext 'Applied autostash.')"
+                else
+-                       ref_stash=refs/stash &&
+-                       >>"$GIT_DIR/logs/$ref_stash" &&
+-                       git update-ref -m "autostash" $ref_stash $stash_sha1 ||
+-                       die "$(eval_gettext 'Cannot store $stash_sha1')"
+-
++                       git stash store -m "autostash" -q $stash_sha1 ||
++                       die "$(eval_gettext "Cannot store \$stash_sha1")"
+                        gettext 'Applying autostash resulted in conflicts.
+ Your changes are safe in the stash.
+ You can run "git stash pop" or "git stash drop" it at any time.
+
+commit 2e6e276decde2a9f04fc29bce734a49d3ba8f484
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Fri Jun 14 18:47:52 2013 +0530$ git log --patch -- git-rebase.sh
+
+commit 20351bb06bf4d32ef3d1a6849d01636f6593339f
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Sat Jun 15 18:43:26 2013 +0530
+
+    rebase: use 'git stash store' to simplify logic
+
+    rebase has no reason to know about the implementation of the stash.  In
+    the case when applying the autostash results in conflicts, replace the
+    relevant code in finish_rebase () to simply call 'git stash store'.
+
+    Signed-off-by: Ramkumar Ramachandra <artagnon@gmail.com>
+    Signed-off-by: Junio C Hamano <gitster@pobox.com>
+
+diff --git a/git-rebase.sh b/git-rebase.sh
+index d0c11a9..17be392 100755
+--- a/git-rebase.sh
++++ b/git-rebase.sh
+@@ -153,11 +153,8 @@ finish_rebase () {
+                then
+                        echo "$(gettext 'Applied autostash.')"
+                else
+-                       ref_stash=refs/stash &&
+-                       >>"$GIT_DIR/logs/$ref_stash" &&
+-                       git update-ref -m "autostash" $ref_stash $stash_sha1 ||
+-                       die "$(eval_gettext 'Cannot store $stash_sha1')"
+-
++                       git stash store -m "autostash" -q $stash_sha1 ||
++                       die "$(eval_gettext "Cannot store \$stash_sha1")"
+                        gettext 'Applying autostash resulted in conflicts.
+ Your changes are safe in the stash.
+ You can run "git stash pop" or "git stash drop" it at any time.
+
+commit 2e6e276decde2a9f04fc29bce734a49d3ba8f484
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Fri Jun 14 18:47:52 2013 +0530$ git log --patch -- git-rebase.sh
+
+commit 20351bb06bf4d32ef3d1a6849d01636f6593339f
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Sat Jun 15 18:43:26 2013 +0530
+
+    rebase: use 'git stash store' to simplify logic
+
+    rebase has no reason to know about the implementation of the stash.  In
+    the case when applying the autostash results in conflicts, replace the
+    relevant code in finish_rebase () to simply call 'git stash store'.
+
+    Signed-off-by: Ramkumar Ramachandra <artagnon@gmail.com>
+    Signed-off-by: Junio C Hamano <gitster@pobox.com>
+
+diff --git a/git-rebase.sh b/git-rebase.sh
+index d0c11a9..17be392 100755
+--- a/git-rebase.sh
++++ b/git-rebase.sh
+@@ -153,11 +153,8 @@ finish_rebase () {
+                then
+                        echo "$(gettext 'Applied autostash.')"
+                else
+-                       ref_stash=refs/stash &&
+-                       >>"$GIT_DIR/logs/$ref_stash" &&
+-                       git update-ref -m "autostash" $ref_stash $stash_sha1 ||
+-                       die "$(eval_gettext 'Cannot store $stash_sha1')"
+-
++                       git stash store -m "autostash" -q $stash_sha1 ||
++                       die "$(eval_gettext "Cannot store \$stash_sha1")"
+                        gettext 'Applying autostash resulted in conflicts.
+ Your changes are safe in the stash.
+ You can run "git stash pop" or "git stash drop" it at any time.
+
+commit 2e6e276decde2a9f04fc29bce734a49d3ba8f484
+Author: Ramkumar Ramachandra <artagnon@gmail.com>
+Date:   Fri Jun 14 18:47:52 2013 +0530
